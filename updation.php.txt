@@ -1,0 +1,53 @@
+<?php
+$size = sizeof($_POST);
+$records = $size / 4;
+
+// Initialize arrays
+$bookid = array();
+$title = array();
+$price = array();
+$author = array();
+
+// Collect data from POST request
+for ($i = 1; $i <= $records; $i++) {
+    $index1 = "bookid" . $i;
+    $bookid[$i] = $_POST[$index1];
+    $index2 = "title" . $i;
+    $title[$i] = $_POST[$index2];
+    $index3 = "price" . $i;
+    $price[$i] = $_POST[$index3];
+    $index4 = "author" . $i;
+    $author[$i] = $_POST[$index4];
+}
+
+// Database connection
+$con = mysqli_connect("localhost", "root", "", "brm_db");
+if (!$con) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Update records in the database
+for ($i = 1; $i <= $records; $i++) {
+    $q = "UPDATE book SET title='$title[$i]', price='$price[$i]', author='$author[$i]' WHERE bookid=$bookid[$i]";
+    mysqli_query($con, $q);
+}
+
+// Close database connection
+mysqli_close($con);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<title> updatoin</title>
+</head>
+<body>
+<h1> Book Record Management/h1>
+<p> <?php 
+      
+            echo $size. "Record updated";
+         
+ ?>
+</p>
+go back to home page <a href="home.php">click here</a>
+</body>
+</html>
